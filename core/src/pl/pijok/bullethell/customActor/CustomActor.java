@@ -17,8 +17,11 @@ public abstract class CustomActor extends Sprite {
     }
 
     public void moveBy(float x, float y) {
-        System.out.println(getX());
         setPosition(getX() + x, getY() + y);
+    }
+
+    public void act(float delta) {
+
     }
 
 }

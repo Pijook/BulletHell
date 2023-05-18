@@ -4,7 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import pl.pijok.bullethell.BulletHell;
+import pl.pijok.bullethell.Controllers;
 
 public class Player extends CustomActor {
 
@@ -14,6 +18,7 @@ public class Player extends CustomActor {
         super(texture);
     }
 
+    @Override
     public void act(float delta) {
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -24,18 +29,26 @@ public class Player extends CustomActor {
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            System.out.println("AAA");
             moveBy(-(speed * delta), 0);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             moveBy(speed * delta, 0);
         }
 
-        float radians = (float) Math.atan2(Gdx.input.getX() - getX(), Gdx.input.getY() - getY());
-        System.out.println("Radians: " + radians);
-        float degrees = (float) Math.toDegrees(radians);
-        System.out.println("Degrees" + degrees);
-        setRotation(degrees);
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            BulletHell.bullets.add(new Bullet(Controllers.getTexturesManager().getTexture("bullet"), getRotation(), 50, getX() + 16 - 4, getY() + 16 - 4));
+        }
 
+        float xInput = Gdx.input.getX();
+        float yInput = (Gdx.graphics.getHeight() - Gdx.input.getY());
+
+        float angle = MathUtils.radiansToDegrees * MathUtils.atan2(yInput - getY(), xInput - getX());
+
+        if(angle < 0){
+            angle += 360;
+        }
+
+        setRotation(angle);
     }
+
 }
